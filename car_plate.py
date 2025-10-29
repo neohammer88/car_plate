@@ -29,6 +29,8 @@ def extract_text_from_paddle_result(result):
             texts.append(text)
     return " ".join(texts)
 
+KNOWN_PLATES = ["ABC123", "XYZ789", "NZ4567"]
+
 def process_frame(frame, frame_count):
     results = model.predict(frame, conf=0.45)
 
@@ -47,16 +49,29 @@ def process_frame(frame, frame_count):
             ocr_result = ocr.predict(roi)[0]  # PaddleOCR return the list, the first is dict result
             text = extract_text_from_paddle_result(ocr_result)
 
-            # Draw in the screen
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
-            label = f"{text} ({conf:.2f})" if text else f"{class_name} ({conf:.2f})"
+            # Registered car_plate only
+            
+            if text in KNOWN_PLATES:
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                label = f"{text} ({conf:.2f})"
+                (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
+                cv2.rectangle(frame, (x1, y1 - h - 10), (x1 + w, y1), (0, 255, 0), -1)
+                cv2.putText(frame, label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
 
-            # Background of texts
-            (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
-            cv2.rectangle(frame, (x1, y1 - h - 10), (x1 + w, y1), (255, 0, 0), -1)
-            cv2.putText(frame, label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+                print(f"[Frame {frame_count}] Registered: '{text}'")
+            else:
+                print(f"[Frame {frame_count}] Unknown: '{text}'")
 
-            print(f"[Frame {frame_count}] {class_name} box ({x1},{y1})~({x2},{y2}), conf={conf:.2f}, text='{text}'")
+            # # Draw in the screen
+            # cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
+            # label = f"{text} ({conf:.2f})" if text else f"{class_name} ({conf:.2f})"
+
+            # # Background of texts
+            # (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
+            # cv2.rectangle(frame, (x1, y1 - h - 10), (x1 + w, y1), (255, 0, 0), -1)
+            # cv2.putText(frame, label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+
+            # print(f"[Frame {frame_count}] {class_name} box ({x1},{y1})~({x2},{y2}), conf={conf:.2f}, text='{text}'")
 
 def run_video():
     cap = cv2.VideoCapture(VIDEO_PATH)
