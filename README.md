@@ -1,7 +1,7 @@
 ## Installation
 `conda` virtual environment is recommended. 
 
-conda create -n yolo python=3.9
+conda create -n yolo python=3.11
 
 conda activate yolov
 
