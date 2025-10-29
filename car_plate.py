@@ -29,7 +29,7 @@ def extract_text_from_paddle_result(result):
             texts.append(text)
     return " ".join(texts)
 
-KNOWN_PLATES = ["EASY2C", "2L84WK", "FMQ668", "QIK MUM", "PONSNB", "GRT NAN", "RVEGAS", "IWDD8U", "M4RYME"]
+KNOWN_PLATES = ["EASY2C", "FMQ668", "QIK MUM", "GRT NAN", "RVEGAS", "M4RYME"]
 
 def process_frame(frame, frame_count):
     results = model.predict(frame, conf=0.45)
