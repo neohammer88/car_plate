@@ -83,12 +83,22 @@ output_dir = "matched_plates"
 os.makedirs(output_dir,exist_ok=True)
 
 def on_plate_match(text, frame, frame_count):
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename = f"{text}_frame{frame_count}_{timestamp}.jpg"
-    filepath = os.path.join(output_dir, filename)
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    # filename = f"{text}_frame{frame_count}_{timestamp}.jpg"
+    # filepath = os.path.join(output_dir, filename)
+    log_entry = f"[{timestamp}] Matched plate: '{text}' at frame {frame_count}\n"
+
+    # Path for log file
+    log_file_path = os.path.join(output_dir, "matched_plates_log.txt")
+
+    # Record log
+    with open(log_file_path, "a", encoding="utf-8") as log_file:
+        log_file.write(log_entry)
+
+    print(f"✅ Matched plate '{text}' logged.")
     
     # Save images
-    cv2.imwrite(filepath, frame)
+    # cv2.imwrite(filepath, frame)
     
     # # Send notification
     # send_notification(text)

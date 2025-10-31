@@ -1,0 +1,5 @@
+[2025-10-30 15:21:13] Matched plate: 'FMQ668' at frame 30
+[2025-10-30 15:21:22] Matched plate: 'EASY2C' at frame 102
+[2025-10-30 15:23:08] Matched plate: 'QIK MUM' at frame 208
+[2025-10-30 15:24:22] Matched plate: 'GRT NAN' at frame 280
+[2025-10-30 15:24:58] Matched plate: 'RVEGAS' at frame 313
